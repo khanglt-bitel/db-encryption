@@ -1,15 +1,17 @@
 package com.example.decryption;
 
 import java.io.IOException;
+import java.util.List;
+import com.example.decryption.DecryptFile;
+import com.example.decryption.ResponseDecrypt;
+
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 public class DecryptionController {
 
     private final DecryptionService service;
@@ -18,22 +20,12 @@ public class DecryptionController {
         this.service = service;
     }
 
-    @GetMapping("/")
-    public String index() {
-        return "upload";
-    }
-
-    @PostMapping(value = "/decrypt", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String decrypt(@RequestParam("file") MultipartFile file,
-                          @RequestParam(defaultValue = "stream") String mode,
-                          Model model) throws IOException {
-        String result;
-        if ("path".equalsIgnoreCase(mode)) {
-            result = service.decryptUsingFilePath(file);
-        } else {
-            result = service.decryptUsingStream(file);
-        }
-        model.addAttribute("decrypted", result);
-        return "result";
+    @PostMapping(value = "/decrypt",
+                 consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+                 produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDecrypt decrypt(@RequestParam("files") MultipartFile[] files,
+                                   @RequestParam(defaultValue = "stream") String mode) throws IOException {
+        List<DecryptFile> results = service.decryptFiles(files, mode);
+        return new ResponseDecrypt(results);
     }
 }
