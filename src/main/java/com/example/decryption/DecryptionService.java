@@ -2,6 +2,10 @@ package com.example.decryption;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.decryption.DecryptFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,5 +27,19 @@ public class DecryptionService {
         String result = library.decrypt(temp.getAbsolutePath());
         temp.delete();
         return result;
+    }
+
+    public List<DecryptFile> decryptFiles(MultipartFile[] files, String mode) throws IOException {
+        List<DecryptFile> results = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String content;
+            if ("path".equalsIgnoreCase(mode)) {
+                content = decryptUsingFilePath(file);
+            } else {
+                content = decryptUsingStream(file);
+            }
+            results.add(new DecryptFile(file.getOriginalFilename(), content));
+        }
+        return results;
     }
 }

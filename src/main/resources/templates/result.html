@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <h1>Decrypted Result</h1>
-    <pre th:text="${decrypted}"></pre>
+    <h1>Decrypted Results</h1>
+    <div th:each="res : ${results}">
+        <h2 th:text="${res.fileName}"></h2>
+        <pre th:text="${res.content}"></pre>
+    </div>
     <a href="/">Back</a>
 </body>
 </html>
