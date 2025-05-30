@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Upload File</h1>
+    <form method="post" action="/decrypt" enctype="multipart/form-data">
+        <input type="file" name="file" required />
+        <select name="mode">
+            <option value="stream">InputStream</option>
+            <option value="path">File Path</option>
+        </select>
+        <button type="submit">Decrypt</button>
+    </form>
+</body>
+</html>
