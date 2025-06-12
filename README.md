@@ -20,4 +20,5 @@ Send a `POST` request to `/decrypt` with one or more files. The service responds
 
 Run the application with `mvn spring-boot:run` and send a `POST` request to `http://localhost:8080/decrypt` with your files.
 
-This project no longer includes the sample HTML upload form. Interact with the service using HTTP tools such as `curl` or Postman.
+You can also open `http://localhost:8080/index.html` in your browser to use a basic front‑end
+upload form that posts to the same backend.
