@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Decrypt Files</title>
+</head>
+<body>
+    <h1>Decrypt Files</h1>
+    <form id="decryptForm">
+        <input type="file" id="files" name="files" multiple required><br/>
+        <label for="mode">Mode:</label>
+        <select id="mode" name="mode">
+            <option value="stream">Stream</option>
+            <option value="path">Path</option>
+        </select>
+        <button type="submit">Decrypt</button>
+    </form>
+    <pre id="output"></pre>
+    <script>
+        const form = document.getElementById('decryptForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const filesInput = document.getElementById('files');
+            const mode = document.getElementById('mode').value;
+            const formData = new FormData();
+            for (const file of filesInput.files) {
+                formData.append('files', file);
+            }
+            formData.append('mode', mode);
+            try {
+                const response = await fetch('/decrypt', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                document.getElementById('output').textContent = 'Error: ' + err;
+            }
+        });
+    </script>
+</body>
+</html>
